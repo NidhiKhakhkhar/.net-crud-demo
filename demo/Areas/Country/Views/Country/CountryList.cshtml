@@ -1,0 +1,178 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @using demo.Areas.Country.Models;
+}
+
+@using System.Data;
+
+@model DataTable;
+
+
+<div class="border rounded p-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold"><i class="bi bi-gear me-2" style="font-size: 20px"></i>COUNTRY LIST</h5>
+        <a asp-area="Country" asp-controller="Country" asp-action="LOC_CountryAddEdit">
+            <button class="btn bg-success text-white py-2">
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Country
+            </button>
+        </a>
+    </div>
+
+    <div class="w-25 ms-auto my-3">
+        <div class="input-group datatables_filter" id="sample_1_filter">
+            <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+            <input type="text" class="form-control input-sm input-small input-inline" id="sample_1" aria-controls="sample_1" placeholder="Search here">
+        </div>
+    </div>
+
+    <hr />
+
+    <form asp-area="Country" asp-controller="LOC_Country">
+        <div class="row">
+            <div class="w-25 ms-auto my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CountryName" name="CountryName" placeholder="Search Country Name here">
+                    @* <input type="hidden" name="CountryName" value="CountryName" />*@
+                </div>
+            </div>
+
+            <div class="w-25 my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CountryCode" name="CountryCode" placeholder="Search Country Code here">
+                    @*<input type="hidden" name="CountryCode" value="CountryCode" />*@
+                </div>
+            </div>
+
+            <div class="w-auto my-3">
+                <div class="input-group">
+                    <input type="submit" asp-action="LOC_Country_Filter" class="btn btn-primary" id="" value="Apply Filter" placeholder="Search Country Code here">
+                </div>
+            </div>
+
+            <div class="w-auto my-3">
+                <div class="input-group">
+                    <input type="submit" asp-action="CountryList" class="btn text-white" style="background-color: rgba(10 , 10 , 10 , 0.5)" id="" value="Clear Filter" placeholder="Search Country Code here">
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+    <div>
+        <table class="table table-striped table-bordered " id="">
+
+            <thead>
+                <tr>
+                    <th>CountryID </th>
+                    <th>CountryName</th>
+                    <th>CountryCode</th>
+                    <th>Created</th>
+                    <th>Modified</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="sample_2">
+
+                @foreach (DataRow dataRow in Model.Rows)
+                {
+                    <tr>
+                        <td>@dataRow["CountryID"]</td>
+                        <td>@dataRow["CountryName"]</td>
+                        <td>@dataRow["CountryCode"]</td>
+                        <td>@Convert.ToDateTime(dataRow["Created"]).ToString("dd-MM-yyyy")</td>
+                        <td>@Convert.ToDateTime(dataRow["Modified"]).ToString("dd-MM-yyyy")</td>
+
+                        <td>
+                            <form asp-area="Country" asp-controller="Country" asp-action="LOC_CountryAddEdit">
+                                <input type="hidden" value="@Convert.ToInt32(dataRow["CountryID"])" name="CountryID" />
+                                <button class="btn btn-warning rounded-3">Edit</button>
+                            </form>
+
+
+                        </td>
+
+                        <td>
+                            <form asp-area="Country" asp-controller="Country" asp-action="LOC_CountryDelete">
+                                <input type="hidden" value="@Convert.ToInt32(dataRow["CountryID"])" name="CountryID" />
+                                <button class="btn btn-danger rounded-3" onclick="return confirmDelete()">Delete</button>
+                            </form>
+                        </td>
+
+                        @*<td><i class="bi bi-pencil-fill"></i> &nbsp;&nbsp;&nbsp;<i class="bi bi-trash3-fill"></i></td>*@
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+    @* <form method="post" asp-action="LOC_Country_Filter" asp-controller="Country" class="form ">
+    <div class=" input-group w-25">
+    <label class="form-label">Country Name</label>
+    <input  class="form-control " name="CountryName" type="text"/>
+
+    </div>
+
+    <div class=" input-group w-25">
+    <label class="form-label">Country Code</label>
+    <input class="form-control " name="CountryCode" type="text" />
+
+    </div>
+
+    <div class="input-group-append col-md-6">
+    <button class="btn btn-outline-primary rounded-3 me-md-2">Search</button>
+    </div>
+    </form> *@
+
+
+    @* <form asp-action="LOC_CountryAddEdit" method="post" asp-controller="Country">
+        <input type="submit" value="Add" class="btn btn-outline-primary rounded-3" />
+    </form> *@
+
+  
+
+    @* <div class="portlet-body">
+    <div class="pull-right">
+    <div id="sample_1_filter" class="dataTables_filter">
+    <label>Search &nbsp; <input type="text" class="form-control input-sm input-small input-inline" placeholder="" id="sample_1" aria-controls="sample_1"/></label>
+    </div>
+
+    </div>
+    </div> *@
+
+   
+
+
+@section Scripts{
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#sample_1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#sample_2 tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        function confirmDelete() {
+            if (confirm("Are you sure to delete record?")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+}

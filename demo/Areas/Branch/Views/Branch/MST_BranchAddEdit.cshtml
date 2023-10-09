@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model MST_Branch
+
+<div class="container border border-gray rounded p-5 shadow">
+
+    <h2><i class="bi bi-gear me-2 pb-5" style="font-size: 25px"></i>Branch</h2>
+
+    <hr />
+
+    <form class="pt-3" method="post" asp-area="Branch" asp-controller="Branch" asp-action="MST_BranchSave">
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span>Branch name</label>
+            <input type="text" class="form-control" asp-for="BranchName" placeholder="Branch Name" aria-label="First name">
+            <span asp-validation-for="BranchName" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span>Branch code</label>
+            <input type="text" class="form-control" asp-for="BranchCode" placeholder="Branch Code" aria-label="Last name">
+            <span asp-validation-for="BranchCode" class="text-danger"></span>
+        </div>
+
+        <div class="col mt-4">
+
+            <input type="hidden" name="BranchID" value="@Model.BranchID" />
+            <button class="btn btn-primary" type="submit">Submit</button>
+            
+        </div>
+
+    </form>
+
+    <br />
+
+    <a asp-action="BranchList">
+        <button class="btn btn-secondary" type="submit">Back</button>
+    </a>
+
+</div>
+

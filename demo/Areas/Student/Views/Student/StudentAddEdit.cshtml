@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @using demo.Areas.Country.Models;
+  
+}
+
+@model MST_Student;
+
+<div class="container border border-gray rounded p-5 shadow">
+
+    <h2><i class="bi bi-gear me-2 pb-5" style="font-size: 25px"></i>Student</h2>
+
+    <hr />
+
+    <form class="pt-3" method="post" asp-area="Student" asp-controller="Student" asp-action="StudentSave">
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span>Student name</label>
+            <input type="text" class="form-control" asp-for="StudentName" placeholder="Student Name" aria-label="First name">
+            <span asp-validation-for="StudentName" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4 form-group">
+            <label><span class="text-dander">*</span>Branch</label>
+            <select class="form-control" asp-for="BranchID" asp-items="@(new SelectList(ViewBag.BranchList,"BranchID" , "BranchName"))">
+                <option value="">Select Branch</option>
+            </select>
+            <span asp-validation-for="BranchID" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4 form-group">
+            <label><span class="text-dander">*</span>City</label>
+            <select class="form-control" asp-for="CityID" asp-items="@(new SelectList(ViewBag.CityList,"CityID" , "CityName"))">
+                <option value="">Select City</option>
+            </select>
+            <span asp-validation-for="CityID" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span>Student Mobile no.</label>
+            <input type="text" placeholder="Enter Student Mobile no." asp-for="MobileNoStudent" class="form-control" value="@Model.MobileNoStudent" />
+            <span asp-validation-for="MobileNoStudent" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span> Email</label>
+            <input type="text" placeholder="Enter Email" asp-for="Email" class="form-control" value="@Model.Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label> Father Mobile no.</label>
+            <input type="text" placeholder="Enter Father's Mobile no.'" asp-for="MobileNoFather" class="form-control" value="@Model.MobileNoFather" />
+            <span asp-validation-for="MobileNoFather" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label> Address</label>
+            <textarea class="form-control" placeholder="Enter Address" asp-for="Address">@Model.Address</textarea>
+            <span asp-validation-for="Address" class="text-danger"></span>
+            @* <input type="text" placeholder="Enter Country name" asp-for="StudentName" class="form-control" value="@Model.StudentName" /> *@
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span> Birth Date</label>
+            <input type="date" placeholder="Enter Birthdate" asp-for="BirthDate" class="form-control" value="@Convert.ToDateTime(Model.BirthDate)" />
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label> Age</label>
+            <input type="text" placeholder="Enter Age" asp-for="Age" class="form-control" value="@Model.Age" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label> <span class="text-dander">*</span>Is Active</label>
+            @* <input type="text" placeholder="IS Active True or False" asp-for="IsActive" class="form-control" value="@Convert.ToBoolean(Model.IsActive)" /> *@
+            <div class="d-flex mt-3">
+                <div class="d-flex">
+                    <input type="radio"  value="true" asp-for="IsActive" checked />
+                    <span class="ms-3">Yes</span>
+                </div>
+                <div class="d-flex ms-4">
+                    <input type="radio" value="false" asp-for="IsActive" />
+                    <span class="ms-3">No</span>
+                </div>
+            </div>
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span> Gender</label>
+            @* <input type="text" placeholder="Enter Gender" asp-for="Gender" class="form-control" value="@Model.Gender" /> *@
+            <div class="d-flex mt-3">
+                <div class="d-flex">
+                    <input type="radio" value="true" asp-for="Gender" checked />
+                    <span class="ms-3">Male</span>
+                </div>
+                <div class="d-flex ms-4">
+                    <input type="radio"  value="false" asp-for="Gender" />
+                    <span class="ms-3">Female</span>
+                </div>
+            </div>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-dander">*</span> Password</label>
+            <input type="text" placeholder="Enter Password" asp-for="Password" class="form-control" value="@Model.Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="col mt-4">
+
+            <input type="hidden" name="StudentID" value="@Model.StudentID" />
+            <button class="btn btn-primary" type="submit">Submit</button>
+           
+        </div>
+
+    </form>
+
+    <br />
+
+    <a asp-action="CityList">
+        <button class="btn btn-secondary" type="submit">Back</button>
+    </a>
+
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        function funcOnCountryChange() {
+            var CountryID = $("#selectedCountry").val();
+
+            $("#selectedState").empty();
+            $("#selectedState").append($("<option></option>").val("").html("Select State"));
+
+            if (CountryID !== "") {
+                $.ajax(
+                    {
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "@Url.Action("StatesForComboBox","Student")" + "?&CountryID=" + CountryID,
+                        data: {},
+                        dataType: "json",
+                        success: function (Result) {
+
+                            $.each(Result, function (key, value) {
+                                $("#selectedState").append($("<option></option>").val(value.stateID).html(value.stateName));
+                            });
+                        },
+                        error: function (err) {
+                            alert("Error to fetch data");
+                        }
+                    }
+                )
+            }
+        }
+    </script>
+}

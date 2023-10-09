@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+
+@model MST_Student;
+
+<div class="container">
+    <h3>@Model.StudentName</h3>
+
+    <table class="table">
+        <tr>
+            <td>Student Mobile number</td>
+            <td>:</td>
+            <td>@Model.MobileNoStudent</td>
+        </tr>
+        <tr>
+            <td>Father's Mobile number</td>
+            <td>:</td>
+            <td>@Model.MobileNoFather</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>:</td>
+            <td>@Model.Address</td>
+        </tr>
+        <tr>
+            <td>BirthDate</td>
+            <td>:</td>
+            <td>@Model.BirthDate</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>:</td>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <td>Age</td>
+            <td>:</td>
+            <td>@Model.Age</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>:</td>
+            <td>@Model.Gender</td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td>:</td>
+            <td>@Model.Password</td>
+        </tr>
+        <tr>
+            <td>Is Active</td>
+            <td>:</td>
+            <td>@Model.IsActive</td>
+        </tr>
+        <tr>
+            <td>Created date</td>
+            <td>:</td>
+            <td>@Model.Created</td>
+        </tr>
+        <tr>
+            <td>Modified date</td>
+            <td>:</td>
+            <td>@Model.Modified</td>
+        </tr>
+    </table>
+
+    <form method="post" asp-area="Student" asp-controller="Student">
+        @Html.HiddenFor(x => x.StudentID)
+        <button class="btn btn-warning rounded-3" asp-action="StudentAddEdit">Edit</button>
+        <button class="btn btn-danger rounded-3" asp-action="StudentDelete" onclick="return confirmDelete()">Delete</button>
+        <button class="btn btn-secondary rounded-3" asp-action="StudentList">Back</button>
+    </form>
+
+</div>
+
+@section Scripts{
+
+    <script>
+        
+
+        function confirmDelete() {
+            if (confirm("Are you sure to delete record?")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+}

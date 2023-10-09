@@ -1,0 +1,159 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+
+@model DataTable;
+
+<div class="border rounded p-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold"><i class="bi bi-gear me-2" style="font-size: 20px"></i>City LIST</h5>
+        <a asp-area="City" asp-controller="City" asp-action="LOC_CityAddEdit">
+            <button class="btn bg-success text-white py-2">
+                <i class="bi bi-plus-circle me-2"></i>
+                Add City
+            </button>
+        </a>
+    </div>
+
+    <div class="w-25 ms-auto my-3">
+        <div class="input-group datatables_filter" id="sample_1_filter">
+            <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+            <input type="text" class="form-control input-sm input-small input-inline" id="sample_1" aria-controls="sample_1" placeholder="Search here">
+        </div>
+    </div>
+
+    <hr />
+
+    <form asp-area="City" asp-controller="City">
+        <div class="row">
+            <div class="w-25 ms-auto my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CityName" name="CityName" placeholder="Search City Name here">
+                    @* <input type="hidden" name="CityName" value="CityName" />*@
+                </div>
+            </div>
+
+            <div class="w-25 my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CityCode" name="CityCode" placeholder="Search City Code here">
+                    @*<input type="hidden" name="CityCode" value="CityCode" />*@
+                </div>
+            </div>
+
+            <div class="w-25 ms-auto my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="StateName" name="StateName" placeholder="Search State Name here">
+                    @* <input type="hidden" name="StateName" value="StateName" />*@
+                </div>
+            </div>
+
+            <div class="w-25 ms-auto my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CountryName" name="CountryName" placeholder="Search Country Name here">
+                    @* <input type="hidden" name="CountryName" value="CountryName" />*@
+                </div>
+            </div>
+
+            <div class="w-auto my-3">
+                <div class="input-group">
+                    <input type="submit" asp-action="LOC_CityFilter" class="btn btn-primary" id="" value="Apply Filter">
+                </div>
+            </div>
+
+            <div class="w-auto my-3">
+                <div class="input-group">
+                    <input type="submit" asp-action="CityList" class="btn text-white" style="background-color: rgba(10 , 10 , 10 , 0.5)" id="" value="Clear Filter">
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <div>
+        <table class="table" id="sample_1">
+
+            <thead>
+                <tr>
+                    <th>CityID </th>
+                    <th>CityName</th>
+                    <th>CityCode</th>
+                    <th>StateName</th>
+                    <th>CountryName</th>
+                    <th>Created</th>
+                    <th>Modified</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="sample_2">
+
+                @foreach (DataRow dataRow in Model.Rows)
+                {
+                    <tr>
+                        <td>@dataRow["CityID"]</td>
+                        <td>@dataRow["CityName"]</td>
+                        <td>@dataRow["CityCode"]</td>
+                        <td>@dataRow["StateName"]</td>
+                        <td>@dataRow["CountryName"]</td>
+                        <td>@Convert.ToDateTime(dataRow["Created"]).ToString("dd-MM-yyyy")</td>
+                        <td>@Convert.ToDateTime(dataRow["Modified"]).ToString("dd-MM-yyyy")</td>
+                        <td>
+                            <form asp-area="City" asp-controller="City" asp-action="LOC_CityAddEdit">
+                                <input type="hidden" value="@Convert.ToInt32(dataRow["CityID"])" name="CityID" />
+                                <button class="btn btn-warning rounded-3">Edit</button>
+                            </form>
+
+
+                        </td>
+
+                        <td>
+                            <form asp-area="City" asp-controller="City" asp-action="LOC_CityDelete">
+                                <input type="hidden" value="@Convert.ToInt32(dataRow["CityID"])" name="CityID" />
+                                <button class="btn btn-danger rounded-3" onclick="return confirmDelete()">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+@section Scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#sample_1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#sample_2 tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        function confirmDelete() {
+            if (confirm("Are you sure to delete record?")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+}

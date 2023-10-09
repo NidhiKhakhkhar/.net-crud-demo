@@ -1,0 +1,99 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model demo.Areas.State.Models.LOC_State
+@using static System.Data.DataTable
+@using demo.Areas.Country.Models
+
+<div class="container border border-gray rounded p-5 shadow">
+
+    <h2><i class="bi bi-gear me-2 pb-5" style="font-size: 25px"></i>State</h2>
+
+    <hr />
+
+    <form class="pt-3" method="post" asp-area="State" asp-controller="State" asp-action="LOC_StateSave">
+
+        <div class="col my-4 form-group">
+            <label><span class="text-danger">*</span>Country</label>
+            <select class="form-control" asp-for="CountryID" asp-items="@(new SelectList(ViewBag.CountryList,"CountryID","CountryName"))">
+                <option value="">Select Countrty</option>
+            </select>
+            <span asp-validation-for="CountryID" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-danger">*</span>State name</label>
+            <input type="text" class="form-control" asp-for="StateName" value="@Model.StateName" placeholder="State Name" />
+            <span asp-validation-for="StateName" class="text-danger"></span>
+        </div>
+
+        <div class="col my-4">
+            <label><span class="text-danger">*</span>State code</label>
+            <input type="text" class="form-control" asp-for="StateCode" value="@Model.StateCode" placeholder="State Code" />
+            <span asp-validation-for="StateCode" class="text-danger"></span>
+        </div>
+
+        <div class="col mt-4">
+
+            <input type="hidden" name="StateId" value="@Model.StateID" />
+            <button class="btn btn-primary" type="submit">Submit</button>
+
+        </div>
+
+    </form>
+
+    <br />
+
+    <a asp-action="StateList">
+        <button class="btn btn-secondary" type="submit">Back</button>
+    </a>
+
+</div>
+
+
+
+@*<form method="post" asp-area="State" asp-controller="State" asp-action="LOC_StateSave">
+    <table class="table">
+        <tr>
+            <td>
+                State Name
+            </td>
+            <td>:</td>
+            <td>
+                <input type="text"  asp-for="StateName" value="@Model.StateName" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                State Code
+            </td>
+            <td>:</td>
+            <td>
+                <input type="text"  asp-for="StateCode" value="@Model.StateCode" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Country
+            </td>
+            <td>:</td>
+            <td>
+                <select class="form-control" asp-for="CountryID" asp-items="@(new SelectList(ViewBag.CountryList,"CountryID" , "CountryName"))">
+                    <option value="">Select option</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="hidden" name="StateID" value="@Model.StateID" />
+                <input type="submit" class="form-control" value="Add" />
+            </td>
+        </tr>
+    </table>
+</form>*@

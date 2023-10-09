@@ -1,0 +1,153 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Data;
+
+@model DataTable;
+
+<div class="border rounded p-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold"><i class="bi bi-gear me-2" style="font-size: 20px"></i>COUNTRY LIST</h5>
+        <a asp-area="Student" asp-controller="Student" asp-action="StudentAddEdit">
+            <button class="btn bg-success text-white py-2">
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Student
+            </button>
+        </a>
+    </div>
+
+    <div class="w-25 ms-auto my-3">
+        <div class="input-group datatables_filter" id="sample_1_filter">
+            <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+            <input type="text" class="form-control input-sm input-small input-inline" id="sample_1" aria-controls="sample_1" placeholder="Search here">
+        </div>
+    </div>
+
+    <hr />
+
+    <form asp-area="Stundet" asp-controller="Student">
+        <div class="row">
+            <div class="w-25 ms-auto my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="StudentName" name="StudentName" placeholder="Search Student Name here">
+                    @* <input type="hidden" name="BranchName" value="BranchName" />*@
+                </div>
+            </div>
+
+            <div class="w-25 my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="BranchName" name="BranchName" placeholder="Search Branch Name here">
+                    @*<input type="hidden" name="BranchCode" value="BranchCode" />*@
+                </div>
+            </div>
+
+            <div class="w-25 my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CityName" name="CityName" placeholder="Search City Name here">
+                    @*<input type="hidden" name="BranchCode" value="BranchCode" />*@
+                </div>
+            </div>
+
+            <div class="w-25 my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="StateName" name="StateName" placeholder="Search State Name here">
+                    @*<input type="hidden" name="BranchCode" value="BranchCode" />*@
+                </div>
+            </div>
+
+            <div class="w-25 my-3">
+                <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+                <div class="input-group">
+                    <div class="input-group-text bg-transparent" style="font-size: 15px"><i class="bi bi-search"></i></div>
+                    <input type="text" class="form-control" id="CountryName" name="CountryName" placeholder="Search Country Name here">
+                    @*<input type="hidden" name="BranchCode" value="BranchCode" />*@
+                </div>
+            </div>
+
+            <div class="w-auto my-3">
+                <div class="input-group">
+                    <input type="submit" asp-action="MST_StudentFilter" class="btn btn-primary" id="" value="Apply Filter" placeholder="Search Country Code here">
+                </div>
+            </div>
+
+            <div class="w-auto my-3">
+                <div class="input-group">
+                    <input type="submit" asp-action="StudentList" class="btn text-white" style="background-color: rgba(10 , 10 , 10 , 0.5)" id="" value="Clear Filter" placeholder="Search Country Code here">
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div>
+        <table class="table" id="sample_1">
+            <thead>
+                <tr>
+                    <th>StudentID</th>
+                    <th>StudentName</th>
+                    <th>BranchName</th>
+                    <th>Created</th>
+                    <th>Modified</th>
+                    <th colspan="3">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody sample_2>
+                @foreach (DataRow dataRow in Model.Rows)
+                {
+                    <tr>
+                        <td>@dataRow["StudentID"]</td>
+                        <td>@dataRow["StudentName"]</td>
+                        <td>@dataRow["BranchName"]</td>
+                        <td>@Convert.ToDateTime(dataRow["Created"]).ToString("dd-MM-yyyy")</td>
+                        <td>@Convert.ToDateTime(dataRow["Modified"]).ToString("dd-MM-yyyy")</td>
+                        <td>
+                            <form method="post" asp-area="Student" asp-controller="Student" asp-action="StudentDetail">
+                                <input type="hidden" value="@Convert.ToInt32(dataRow["StudentID"])" name="StudentID" />
+                                <button class="btn btn-primary rounded-3">Details</button>
+                            </form>
+                        </td>
+
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#sample_1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#sample_2 tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        function confirmDelete() {
+            if (confirm("Are you sure to delete record?")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+
+}
